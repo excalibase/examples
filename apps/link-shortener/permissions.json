@@ -1,0 +1,18 @@
+[
+  {
+    "table": "public.link_shortener_links",
+    "role": "anon",
+    "operation": "select",
+    "permission": { "filter": {}, "columns": ["code", "target_url", "clicks", "created_at"], "limit": 50 }
+  },
+  {
+    "function": "public.link_shortener_create",
+    "track": { "inferPermissions": false, "sessionArgument": null },
+    "role": "anon"
+  },
+  {
+    "function": "public.link_shortener_hit",
+    "track": { "inferPermissions": false, "sessionArgument": null },
+    "role": "anon"
+  }
+]

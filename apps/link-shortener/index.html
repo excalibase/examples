@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Link Shortener</title>
+  <meta name="description" content="Paste a long URL, get a short link and count its clicks. Built on Excalibase.">
+  <link rel="stylesheet" href="style.css">
+  <script src="/config.js"></script>
+  <script src="shared.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="/">&larr; All examples</a>
+    <h1>Link Shortener</h1>
+    <p class="lede">Paste a long URL and get a short link. The database picks the code and counts every click.</p>
+  </header>
+
+  <main>
+    <form id="shorten" class="card composer" novalidate>
+      <label class="field-label" for="url">Long URL</label>
+      <div class="input-row">
+        <input id="url" name="url" type="url" inputmode="url" maxlength="2048" required
+          placeholder="https://example.com/a/very/long/path?with=parameters" autocomplete="off" spellcheck="false">
+        <button id="submit" type="submit" class="primary">Shorten</button>
+      </div>
+      <p class="hint">http:// or https:// only, up to 2048 characters.</p>
+      <p id="form-message" class="message" role="status"></p>
+    </form>
+
+    <section id="result" class="card result" hidden aria-live="polite">
+      <label class="field-label" for="short-url">Your short link</label>
+      <div class="input-row">
+        <input id="short-url" type="text" readonly>
+        <button id="copy" type="button" class="primary">Copy</button>
+      </div>
+      <p class="hint">Goes to <a id="result-target" rel="noopener noreferrer nofollow"></a></p>
+    </section>
+
+    <section class="recent">
+      <div class="recent-head">
+        <h2>Your recent links</h2>
+        <button id="refresh" type="button" class="ghost">Refresh clicks</button>
+      </div>
+      <p id="recent-empty" class="hint">Links you shorten in this browser show up here.</p>
+      <ol id="recent" class="links"></ol>
+      <p id="recent-message" class="message" role="status"></p>
+      <button id="forget" type="button" class="ghost" hidden>Clear this list</button>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Links live in an Excalibase project. A tracked Postgres function makes each code and checks the URL, another counts clicks in one statement, and REST reads the counts. Visitors can call those two functions and read links, nothing else.
+  </footer>
+</body>
+</html>

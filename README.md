@@ -13,6 +13,7 @@ Every app is a plain HTML page that signs in with a publishable key (the anon ro
 | [Feedback Board](apps/feedback-board/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/feedback-board/)) | Post ideas, bugs and questions; upvote once per browser | REST reads/inserts, GraphQL aggregates, column-level insert permissions, `allowAggregations`, constraints as rules |
 | [Live Poll](apps/live-poll/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/live-poll/)) | Create a poll, share the link, watch results update live; one vote per browser | Realtime GraphQL subscriptions (polling fallback), GraphQL aggregates, composite foreign keys, unique keys, column-level permissions |
 | [Kanban](apps/kanban/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/kanban/)) | Personal boards with sign-up, drag and drop, and live sync across tabs | End-user auth, row permissions on `X-Excalibase-User-Id`, session presets, GraphQL subscriptions |
+| [Link Shortener](apps/link-shortener/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/link-shortener/)) | Paste a long URL, get a short link, count its clicks | Tracked Postgres functions over GraphQL and REST `rpc/`, function permissions, atomic click counts, validation and a rate cap in the database, REST `in.()` reads |
 
 Each app folder has:
 
