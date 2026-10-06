@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanban</title>
+  <meta name="description" content="Personal kanban boards with sign-up, per-user row permissions and live sync. Built on Excalibase.">
+  <link rel="stylesheet" href="style.css">
+  <script src="/config.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="/">&larr; All examples</a>
+    <div class="title-row">
+      <h1>Kanban</h1>
+      <div id="account" class="account" hidden>
+        <span id="who" class="who"></span>
+        <span id="live" class="live" title="Live sync">offline</span>
+        <button id="sign-out" type="button" class="ghost">Sign out</button>
+      </div>
+    </div>
+    <p class="lede">Your own boards, visible only to you. Changes appear in every tab you have open.</p>
+  </header>
+
+  <main>
+    <section id="auth" class="card auth" hidden aria-labelledby="auth-title">
+      <h2 id="auth-title" class="sr-only">Sign in or create an account</h2>
+      <div class="tabs" role="tablist" aria-label="Account">
+        <button id="tab-sign-in" type="button" role="tab" aria-selected="true" aria-controls="auth-form">Sign in</button>
+        <button id="tab-sign-up" type="button" role="tab" aria-selected="false" aria-controls="auth-form">Create account</button>
+      </div>
+      <form id="auth-form" class="auth-form" role="tabpanel" novalidate>
+        <label id="name-field" class="field" hidden>
+          <span>Name</span>
+          <input id="full-name" name="fullName" type="text" maxlength="80" autocomplete="name">
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input id="email" name="email" type="email" maxlength="200" autocomplete="email" required>
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="password" name="password" type="password" minlength="8" maxlength="200" autocomplete="current-password" required>
+        </label>
+        <button id="auth-submit" type="submit" class="primary">Sign in</button>
+        <p id="auth-message" class="message" role="status"></p>
+        <p class="fine">This demo signs up a real account in a shared example project. Use any address you like; it is not shared or used for anything else.</p>
+      </form>
+    </section>
+
+    <section id="workspace" hidden>
+      <div class="boardbar">
+        <label class="sr-only" for="board-select">Board</label>
+        <select id="board-select"></select>
+        <button id="board-new" type="button">New board</button>
+        <button id="board-rename" type="button">Rename</button>
+        <button id="board-delete" type="button" class="danger-text">Delete</button>
+      </div>
+      <p id="board-message" class="message" role="status"></p>
+
+      <div id="columns" class="columns">
+        <section class="column" data-status="todo" aria-labelledby="col-todo">
+          <h2 id="col-todo">To do <span class="count" data-count="todo">0</span></h2>
+          <ol class="cards" data-status="todo" aria-labelledby="col-todo"></ol>
+          <form class="add-card" data-status="todo">
+            <label class="sr-only" for="add-todo">New card in To do</label>
+            <input id="add-todo" type="text" maxlength="200" placeholder="Add a card" autocomplete="off">
+            <button type="submit" aria-label="Add card to To do">Add</button>
+          </form>
+        </section>
+        <section class="column" data-status="doing" aria-labelledby="col-doing">
+          <h2 id="col-doing">Doing <span class="count" data-count="doing">0</span></h2>
+          <ol class="cards" data-status="doing" aria-labelledby="col-doing"></ol>
+          <form class="add-card" data-status="doing">
+            <label class="sr-only" for="add-doing">New card in Doing</label>
+            <input id="add-doing" type="text" maxlength="200" placeholder="Add a card" autocomplete="off">
+            <button type="submit" aria-label="Add card to Doing">Add</button>
+          </form>
+        </section>
+        <section class="column" data-status="done" aria-labelledby="col-done">
+          <h2 id="col-done">Done <span class="count" data-count="done">0</span></h2>
+          <ol class="cards" data-status="done" aria-labelledby="col-done"></ol>
+          <form class="add-card" data-status="done">
+            <label class="sr-only" for="add-done">New card in Done</label>
+            <input id="add-done" type="text" maxlength="200" placeholder="Add a card" autocomplete="off">
+            <button type="submit" aria-label="Add card to Done">Add</button>
+          </form>
+        </section>
+      </div>
+    </section>
+
+    <dialog id="editor" aria-labelledby="editor-title">
+      <form id="editor-form" method="dialog" class="editor">
+        <h2 id="editor-title">Edit card</h2>
+        <label class="field">
+          <span>Title</span>
+          <input id="editor-card-title" type="text" maxlength="200" required>
+        </label>
+        <label class="field">
+          <span>Notes</span>
+          <textarea id="editor-card-description" rows="5" maxlength="2000"></textarea>
+        </label>
+        <label class="field">
+          <span>Column</span>
+          <select id="editor-card-status">
+            <option value="todo">To do</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+        <p id="editor-message" class="message" role="status"></p>
+        <div class="editor-actions">
+          <button id="editor-delete" type="button" class="danger-text">Delete</button>
+          <span class="spacer"></span>
+          <button id="editor-cancel" type="button">Cancel</button>
+          <button id="editor-save" type="submit" class="primary">Save</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="foot">
+    Data lives in an Excalibase project: end-user sign-in, REST for boards and cards, row permissions on the signed-in user's id, and GraphQL subscriptions for live sync.
+  </footer>
+</body>
+</html>
