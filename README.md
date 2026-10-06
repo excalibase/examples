@@ -11,6 +11,7 @@ Every app is a plain HTML page that signs in with a publishable key (the anon ro
 | App | What it is | Excalibase features |
 | --- | --- | --- |
 | [Feedback Board](apps/feedback-board/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/feedback-board/)) | Post ideas, bugs and questions; upvote once per browser | REST reads/inserts, GraphQL aggregates, column-level insert permissions, `allowAggregations`, constraints as rules |
+| [Live Poll](apps/live-poll/) ([live](https://examples-jfp7kx46kb.apps.excalibase.io/live-poll/)) | Create a poll, share the link, watch results update live; one vote per browser | Realtime GraphQL subscriptions (polling fallback), GraphQL aggregates, composite foreign keys, unique keys, column-level permissions |
 
 Each app folder has:
 

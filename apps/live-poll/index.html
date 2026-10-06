@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Poll</title>
+  <meta name="description" content="Create a poll, share the link, watch the votes come in live. Built on Excalibase.">
+  <link rel="stylesheet" href="style.css">
+  <script src="/config.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="/">&larr; All examples</a>
+    <h1>Live Poll</h1>
+    <p class="lede">Ask a question, share the link, and watch the results move as people vote.</p>
+  </header>
+
+  <main>
+    <form id="create-view" class="card composer" novalidate hidden>
+      <label class="field-label" for="question">Question</label>
+      <input id="question" name="question" type="text" minlength="3" maxlength="200" required
+        placeholder="What should we have for lunch?" autocomplete="off">
+      <fieldset class="options">
+        <legend class="field-label">Options <span class="hint">(2 to 6)</span></legend>
+        <ol id="option-inputs" class="option-inputs"></ol>
+        <button id="add-option" type="button" class="ghost">+ Add option</button>
+      </fieldset>
+      <div class="composer-row">
+        <button id="create" type="submit" class="primary">Create poll</button>
+      </div>
+      <p id="create-message" class="message" role="status"></p>
+    </form>
+
+    <section id="poll-view" hidden>
+      <div class="card poll">
+        <div class="poll-head">
+          <h2 id="poll-question"></h2>
+          <span id="live" class="live" role="status"><span class="dot" aria-hidden="true"></span><span id="live-text">Connecting…</span></span>
+        </div>
+        <p id="poll-hint" class="hint"></p>
+        <ol id="choices" class="choices" aria-live="polite"></ol>
+        <p class="total"><span id="total">0</span> votes</p>
+        <p id="poll-message" class="message" role="status"></p>
+      </div>
+
+      <div class="card share">
+        <label class="field-label" for="share-url">Share this poll</label>
+        <div class="share-row">
+          <input id="share-url" type="text" readonly>
+          <button id="copy" type="button" class="primary">Copy link</button>
+        </div>
+      </div>
+
+      <p class="again"><a href="./">Create another poll</a></p>
+    </section>
+
+    <p id="page-message" class="message" role="status"></p>
+  </main>
+
+  <footer class="foot">
+    Polls, options and votes live in an Excalibase project: REST to create and vote, GraphQL aggregates for the counts, and a GraphQL subscription for live updates.
+  </footer>
+</body>
+</html>
