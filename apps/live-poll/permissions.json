@@ -1,0 +1,43 @@
+[
+  {
+    "table": "public.live_poll_polls",
+    "role": "anon",
+    "operation": "select",
+    "permission": { "filter": {}, "columns": ["id", "question", "created_at"], "limit": 50 }
+  },
+  {
+    "table": "public.live_poll_polls",
+    "role": "anon",
+    "operation": "insert",
+    "permission": { "check": {}, "columns": ["question"] }
+  },
+  {
+    "table": "public.live_poll_options",
+    "role": "anon",
+    "operation": "select",
+    "permission": { "filter": {}, "columns": ["id", "poll_id", "position", "label"], "limit": 50 }
+  },
+  {
+    "table": "public.live_poll_options",
+    "role": "anon",
+    "operation": "insert",
+    "permission": { "check": {}, "columns": ["poll_id", "position", "label"] }
+  },
+  {
+    "table": "public.live_poll_votes",
+    "role": "anon",
+    "operation": "select",
+    "permission": {
+      "filter": {},
+      "columns": ["id", "poll_id", "option_id", "created_at"],
+      "allowAggregations": true,
+      "limit": 50
+    }
+  },
+  {
+    "table": "public.live_poll_votes",
+    "role": "anon",
+    "operation": "insert",
+    "permission": { "check": {}, "columns": ["poll_id", "option_id", "voter_id"] }
+  }
+]
