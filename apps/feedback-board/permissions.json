@@ -1,0 +1,40 @@
+[
+  {
+    "table": "public.feedback_posts",
+    "role": "anon",
+    "operation": "select",
+    "permission": {
+      "filter": {},
+      "columns": ["id", "kind", "body", "author_name", "status", "created_at"],
+      "limit": 100
+    }
+  },
+  {
+    "table": "public.feedback_posts",
+    "role": "anon",
+    "operation": "insert",
+    "permission": {
+      "check": {},
+      "columns": ["kind", "body", "author_name"]
+    }
+  },
+  {
+    "table": "public.feedback_votes",
+    "role": "anon",
+    "operation": "select",
+    "permission": {
+      "filter": {},
+      "columns": ["feedback_id", "voter_id", "created_at"],
+      "allowAggregations": true
+    }
+  },
+  {
+    "table": "public.feedback_votes",
+    "role": "anon",
+    "operation": "insert",
+    "permission": {
+      "check": {},
+      "columns": ["feedback_id", "voter_id"]
+    }
+  }
+]

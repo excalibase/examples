@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback Board</title>
+  <meta name="description" content="Post ideas, bugs and questions; upvote what matters. Built on Excalibase.">
+  <link rel="stylesheet" href="style.css">
+  <script src="/config.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="/">&larr; All examples</a>
+    <h1>Feedback Board</h1>
+    <p class="lede">Share an idea, report a bug or ask a question. Upvote the posts you agree with.</p>
+  </header>
+
+  <main>
+    <form id="post-form" class="card composer" novalidate>
+      <div class="kinds" role="radiogroup" aria-label="Kind">
+        <label><input type="radio" name="kind" value="idea" checked><span>Idea</span></label>
+        <label><input type="radio" name="kind" value="bug"><span>Bug</span></label>
+        <label><input type="radio" name="kind" value="question"><span>Question</span></label>
+        <label><input type="radio" name="kind" value="other"><span>Other</span></label>
+      </div>
+      <label class="sr-only" for="body">Your feedback</label>
+      <textarea id="body" name="body" rows="3" minlength="3" maxlength="1000" required
+        placeholder="What should we build, fix or explain?"></textarea>
+      <div class="composer-row">
+        <label class="sr-only" for="author">Your name (optional)</label>
+        <input id="author" name="author_name" type="text" maxlength="50" placeholder="Your name (optional)" autocomplete="nickname">
+        <span id="counter" class="counter" aria-live="polite">0 / 1000</span>
+        <button id="submit" type="submit">Post</button>
+      </div>
+      <p id="form-message" class="message" role="status"></p>
+    </form>
+
+    <nav class="filters" aria-label="Filter by kind">
+      <button type="button" data-kind="" class="active">All</button>
+      <button type="button" data-kind="idea">Ideas</button>
+      <button type="button" data-kind="bug">Bugs</button>
+      <button type="button" data-kind="question">Questions</button>
+      <button type="button" data-kind="other">Other</button>
+    </nav>
+
+    <p id="list-message" class="message" role="status"></p>
+    <ol id="posts" class="posts" aria-live="polite"></ol>
+  </main>
+
+  <footer class="foot">
+    Data lives in an Excalibase project: REST for posts and votes, GraphQL aggregates for the counts.
+  </footer>
+</body>
+</html>
