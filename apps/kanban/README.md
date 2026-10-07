@@ -24,7 +24,9 @@ All user text is rendered with `textContent`, never `innerHTML`. Cards move with
 
 ### About signing up
 
-Sign-up on this demo is real: it creates an end-user account in the shared example project. The project does not require email verification, so you are signed in right away; a verification email is still sent to the address you give. Accounts and boards are only visible to their owner. The auth service itself only requires a non-empty password; this page asks for at least 8 characters.
+Sign-up on this demo is real: it creates an end-user account in the shared example project. The project does not require email verification, so you are signed in right away and no email is sent. An address that already has an account is refused with 409, and the page asks you to sign in instead. Accounts and boards are only visible to their owner. Passwords must be at least 8 characters, at most 256 bytes and not only spaces; the auth service enforces this and the page checks the length first.
+
+If your own project requires email verification, sign-up returns no session and the page asks you to check your inbox. The answer is the same whether or not the address already has an account.
 
 ## Files
 
