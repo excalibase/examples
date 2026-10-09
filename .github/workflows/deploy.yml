@@ -9,9 +9,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-concurrency:
-  group: deploy-examples
-  cancel-in-progress: false
+concurrency: deploy-examples
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,80 +18,17 @@ jobs:
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - id: tag
-        run: echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
       - id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: site/Dockerfile
           push: true
-          tags: |
-            excalibase/examples-site:main
-            excalibase/examples-site:${{ steps.tag.outputs.short }}
-      - name: Deploy to Excalibase
-        env:
-          EXCALIBASE_TOKEN: ${{ secrets.EXCALIBASE_TOKEN }}
-          IMAGE: excalibase/examples-site@${{ steps.build.outputs.digest }}
-          COMMIT_SHA: ${{ github.sha }}
-        run: |
-          set -eu
-          APP_API="https://app.excalibase.io/api/projects/proj-jfp7kx46kb/apps/1144539e-ec14-4c36-806a-63506fdc6304"
-          answer=$(curl -sS -X POST "$APP_API/deploy" \
-            -H "Authorization: Bearer $EXCALIBASE_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"image\":\"$IMAGE\",\"commitSha\":\"$COMMIT_SHA\"}" \
-            -w '\n%{http_code}')
-          code=$(printf '%s\n' "$answer" | tail -n 1)
-          body=$(printf '%s\n' "$answer" | sed '$d')
-          if [ "$code" != "202" ]; then
-            echo "Deploy refused ($code): $body" >&2
-            exit 1
-          fi
-          deploy_id=$(printf '%s' "$body" | sed -n 's/^{"id":"\([^"]*\)".*/\1/p')
-          if [ -z "$deploy_id" ]; then
-            echo "No deploy id in: $body" >&2
-            exit 1
-          fi
-          echo "Deploy $deploy_id started; waiting until it is live"
-          tries=0
-          unanswered=0
-          while [ "$tries" -lt 120 ]; do
-            tries=$((tries + 1))
-            answer=$(curl -sS "$APP_API/deploys/$deploy_id" -H "Authorization: Bearer $EXCALIBASE_TOKEN" \
-              -w '\n%{http_code}' || true)
-            code=$(printf '%s\n' "$answer" | tail -n 1)
-            state=$(printf '%s\n' "$answer" | sed '$d')
-            case "$code" in
-              200) unanswered=0 ;;
-              000|5??)
-                unanswered=$((unanswered + 1))
-                if [ "$unanswered" -ge 6 ]; then
-                  echo "The API did not answer ($code): $state" >&2
-                  exit 1
-                fi
-                sleep 5
-                continue ;;
-              *)
-                echo "Polling refused ($code): $state" >&2
-                exit 1 ;;
-            esac
-            status=$(printf '%s' "$state" | sed -n 's/.*"status":"\([a-z]*\)".*/\1/p')
-            case "$status" in
-              succeeded)
-                echo "Live at $(printf '%s' "$state" | sed -n 's/.*"url":"\([^"]*\)".*/\1/p')"
-                exit 0 ;;
-              failed|superseded)
-                echo "Deploy $status: $state" >&2
-                exit 1 ;;
-              pending|rolling) ;;
-              *)
-                echo "Unexpected answer: $state" >&2
-                exit 1 ;;
-            esac
-            sleep 5
-          done
-          echo "Deploy $deploy_id did not finish within 10 minutes" >&2
-          exit 1
+          tags: excalibase/examples-site:main,excalibase/examples-site:${{ github.sha }}
+      - uses: excalibase/deploy-action@v1
+        with:
+          app: proj-jfp7kx46kb/1144539e-ec14-4c36-806a-63506fdc6304
+          image: excalibase/examples-site@${{ steps.build.outputs.digest }}
+          token: ${{ secrets.EXCALIBASE_TOKEN }}

@@ -24,7 +24,7 @@ Each app folder has:
 
 ## How it is hosted
 
-`site/` builds one nginx image (non-root, port 8080) that serves every `apps/<name>/` at `/<name>/`, a gallery at `/` generated from the app READMEs, and a shared `/config.js` with the project URL, id and publishable key. On every push to `main` that touches `apps/` or `site/`, [the workflow](.github/workflows/deploy.yml) builds the image, pushes it to Docker Hub and deploys it by digest to an Excalibase container app.
+`site/` builds one nginx image (non-root, port 8080) that serves every `apps/<name>/` at `/<name>/`, a gallery at `/` generated from the app READMEs, and a shared `/config.js` with the project URL, id and publishable key. On every push to `main` that touches `apps/` or `site/`, [the workflow](.github/workflows/deploy.yml) builds the image, pushes it to Docker Hub and deploys it by digest to an Excalibase container app with [excalibase/deploy-action](https://github.com/excalibase/deploy-action).
 
 Build and run it locally:
 
