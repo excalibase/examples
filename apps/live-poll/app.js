@@ -165,7 +165,7 @@
     const votes = state.counts[option.id] || 0;
     const percent = total === 0 ? 0 : Math.round((votes / total) * 100);
     const voted = state.myChoice !== null;
-    nodes.item.classList.toggle("mine", option.id === state.myChoice);
+    nodes.item.classList.toggle("mine", String(option.id) === state.myChoice);
     nodes.item.classList.toggle("leader", voted && votes === leader && votes > 0);
     nodes.button.disabled = voted;
     nodes.button.setAttribute("aria-label", voted
@@ -276,7 +276,7 @@
 
   async function onVote(optionId) {
     if (state.myChoice !== null) return;
-    state.myChoice = optionId;
+    state.myChoice = String(optionId);
     state.counts[optionId] = (state.counts[optionId] || 0) + 1;
     renderPoll();
     byId("poll-message").textContent = "";
@@ -300,8 +300,9 @@
       }
       state.poll = found.poll;
       state.options = found.options;
-      const choice = Number(stored(myChoiceKey(pollId), ""));
-      state.myChoice = state.options.some(function (option) { return option.id === choice; }) ? choice : null;
+      // Ids are bigints, which the API sends as strings; compare as strings.
+      const choice = stored(myChoiceKey(pollId), "");
+      state.myChoice = state.options.some(function (option) { return String(option.id) === choice; }) ? choice : null;
       state.counts = await fetchCounts(state.options.map(function (option) { return option.id; }));
       byId("share-url").value = location.origin + location.pathname + "?p=" + pollId;
       document.title = state.poll.question + " · Live Poll";
